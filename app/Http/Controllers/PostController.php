@@ -8,6 +8,7 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
+    
     public function index()
     {
         $posts = Post::all();
@@ -26,7 +27,6 @@ class PostController extends Controller
         return redirect()->route('posts.index')->with('message', 'Post created successfully.');
     }
     
-
     public function create()
     {
         return Inertia::render('Posts/Create');
