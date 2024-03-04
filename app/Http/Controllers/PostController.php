@@ -8,7 +8,7 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
-    
+
     public function index()
     {
         $posts = Post::all();
@@ -39,6 +39,14 @@ class PostController extends Controller
         return Inertia::render('Posts/Post', [
             'post' => $post
         ]);
+    }
+
+    public function destroy($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+    
+        return redirect()->route('posts.index')->with('message', 'Post deleted successfully.');
     }
 
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from '@inertiajs/react'
+import DeleteButton from '@/Components/DeleteButton';
 
 class Posts extends React.Component {
     render() {
@@ -21,6 +22,7 @@ class Posts extends React.Component {
                                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                                     {post.body}
                                 </p>
+                                <DeleteButton to={`/posts/${post.id}`} className='ml-auto'>Delete</DeleteButton>
                             </div>
                         ))}
                     </div>
