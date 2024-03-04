@@ -5,7 +5,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 
-export default function Form() {
+export default function CreateForm() {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
         body: '',

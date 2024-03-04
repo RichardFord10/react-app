@@ -41,6 +41,23 @@ class PostController extends Controller
         ]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+        $post->update($request->all());
+    
+        return redirect()->route('posts.index')->with('message', 'Post updated successfully.');
+    }
+
+    public function edit($id)
+    {
+        $post = Post::findOrFail($id);
+    
+        return Inertia::render('Posts/Edit', [
+            'post' => $post
+        ]);
+    }
+
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
