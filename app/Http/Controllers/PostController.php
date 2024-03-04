@@ -32,4 +32,13 @@ class PostController extends Controller
         return Inertia::render('Posts/Create');
     }
 
+    public function show($id)
+    {
+        $post = Post::findOrFail($id);
+    
+        return Inertia::render('Posts/Post', [
+            'post' => $post
+        ]);
+    }
+
 }
