@@ -12,7 +12,8 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return Inertia::render('Posts/Feed', ['posts' => $posts]);
+
+        return Inertia::render('Posts/Feed', ['posts' => $posts, 'user_id' => auth()->id()]);
     }
 
     public function store(Request $request)
@@ -20,11 +21,27 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
+            'image' => 'required|image|max:10240', 
         ]);
+        
+        if ($request->hasFile('image')) {
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $path = $request->file('image')->storeAs('public/images', $fileNameToStore);
+        } else {
+            $fileNameToStore = 'noimage.jpg';
+        }
+
+        $post = new Post();
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->user_id = auth()->id();
+        $post->image = $fileNameToStore;
+        $post->save();
     
-        Post::create($request->only('title', 'body'));
-    
-        return redirect()->route('posts.index')->with('message', 'Post created successfully.');
+        return response()->json(['page' => route('posts.index')]);
     }
     
     public function create()
@@ -64,6 +81,12 @@ class PostController extends Controller
         $post->delete();
     
         return redirect()->route('posts.index')->with('message', 'Post deleted successfully.');
+    }
+
+    //handle file upload
+    public function upload(Request $request)
+    {
+
     }
 
 }

@@ -16,7 +16,7 @@ export default function Feed({ posts, auth }) {
           </div>
         }
       >
-        <Posts posts={posts} />
+        <Posts posts={posts} user_id={auth.user.id} />
       </AuthenticatedLayout>
     </div>
   );
