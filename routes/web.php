@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
     Route::resource('posts', PostController::class);
+    Route::resource('comments', CommentsController::class);
+    Route::get('/posts/{postId}/comments', [CommentsController::class, 'index']);
     Route::get('/posts/{id}', 'PostController@show')->name('posts.show');
     Route::delete('/posts', [ProfileController::class, 'destroy'])->name('posts.destroy');
     Route::patch('/posts/edit/{id}', [PostController::class, 'update'])->name('posts.update');

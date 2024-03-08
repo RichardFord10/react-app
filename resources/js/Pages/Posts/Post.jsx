@@ -1,4 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Comment from "@/Components/Comment";
+import CommentsList from "@/Components/CommentsList";
 
 function Post({ post, auth }) {
     return (
@@ -7,10 +9,8 @@ function Post({ post, auth }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                         <header>
-                            {/* Adjusted class for text size and centering */}
                             <h2 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-center text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{post.title}</h2>
                         </header>
-                        {/* Render the image here, larger in the middle */}
                         {post.image && (
                             <div className="flex justify-center mt-4">
                                 <img src={`/storage/images/${post.image}`} alt="Post Image" className="max-w-full h-40 rounded-lg" />
@@ -21,6 +21,8 @@ function Post({ post, auth }) {
                                 {post.body}
                             </p>
                         </div>
+                        <Comment user={auth.user} postId={post.id} />
+                        <CommentsList postId={post.id} />
                     </div>
                 </div>
             </div>
