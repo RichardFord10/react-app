@@ -2,15 +2,22 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 function Post({ post, auth }) {
     return (
-        <AuthenticatedLayout header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Post</h2>} user={auth.user}>
+        <AuthenticatedLayout header={<h2 className="font-semibold text-3xl text-center text-gray-800 dark:text-gray-200 leading-tight">Post</h2>} user={auth.user}>
             <div className="py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                         <header>
-                            <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">{post.title}</h2>
+                            {/* Adjusted class for text size and centering */}
+                            <h2 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-center text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{post.title}</h2>
                         </header>
+                        {/* Render the image here, larger in the middle */}
+                        {post.image && (
+                            <div className="flex justify-center mt-4">
+                                <img src={`/storage/images/${post.image}`} alt="Post Image" className="max-w-full h-40 rounded-lg" />
+                            </div>
+                        )}
                         <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                            <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-300">
                                 {post.body}
                             </p>
                         </div>
