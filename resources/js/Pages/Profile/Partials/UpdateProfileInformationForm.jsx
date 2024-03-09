@@ -4,19 +4,31 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import ImageUploading from "react-images-uploading";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
+    const maxNumber = 1;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
         email: user.email,
     });
+    const [images, setImages] = React.useState([]);
 
     const submit = (e) => {
         e.preventDefault();
 
         patch(route('profile.update'));
+    };
+
+    const onChange = (imageList, addUpdateIndex) => {
+        // data for submit
+        console.log(imageList, addUpdateIndex);
+        setImages(imageList);
     };
 
     return (
@@ -27,10 +39,55 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     Update your account's profile information and email address.
                 </p>
+
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
+                    <div className="flex justify-center">
+                        <div className="rounded-full overflow-hidden">
+                            <ImageUploading
+                                multiple
+                                value={images}
+                                onChange={onChange}
+                                maxNumber={maxNumber}
+                                dataURLKey="data_url"
+                                acceptType={["jpg", "gif", "png"]}
+                            >
+                                {({
+                                    imageList,
+                                    onImageUpload,
+                                    onImageRemoveAll,
+                                    onImageUpdate,
+                                    onImageRemove,
+                                    isDragging,
+                                    dragProps
+                                }) => (
+                                    <div className="upload__image-wrapper">
+                                        <button
+                                            style={isDragging ? { color: "red" } : null}
+                                            onClick={onImageUpload}
+                                            {...dragProps}
+                                        >
+                                              <FontAwesomeIcon className="text-white" icon={faUserCircle} />
+                                        </button>
+                                        &nbsp;
+                                        {/* <button onClick={onImageRemoveAll}>Remove</button> */}
+                                        {imageList.map((image, index) => (
+                                            <div key={index} className="image-item">
+                                                <img src={image.data_url} alt="" width="100" />
+                                                <div className="image-item__btn-wrapper">
+                                                    <button onClick={() => onImageUpdate(index)}>Update</button>
+                                                    <button onClick={() => onImageRemove(index)}>Remove</button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </ImageUploading>
+                        </div>
+                    </div>
+
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput

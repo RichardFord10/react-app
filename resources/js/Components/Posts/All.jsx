@@ -14,28 +14,28 @@ class Posts extends React.Component {
                             <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Posts</h2>
                         </header>
                         {posts.map(post => (
-                        <Link href={`/posts/${post.id}`}>
-                            <div key={post.id} className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center">
-                                <div className="flex items-center">
-                                    {post.image && (
-                                        <img src={`/storage/images/${post.image}`} alt="Post Thumbnail" className="w-16 h-16 rounded mr-4" />
-                                    )}
-                                    <div>
-                                        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                                {post.title}
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                            {post.body}
-                                        </p>
-                                    </div>
-                                </div>
-                                {post.user_id === user_id && (
+                            <Link href={`/posts/${post.id}`}>
+                                <div key={post.id} className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center">
                                     <div className="flex items-center">
-                                        <EditButton to={`/posts/edit/${post.id}`} className="mr-2">Edit</EditButton>
-                                        <DeleteButton to={`/posts/${post.id}`}>Delete</DeleteButton>
+                                        {post.images.length > 0 && ( // Check if the post has any images
+                                            <img src={`/storage/${post.images[0].image_path}`} alt="Post Thumbnail" className="w-16 h-16 rounded mr-4" />
+                                        )}
+                                        <div>
+                                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                                {post.title}
+                                            </h3>
+                                            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                                {post.body}
+                                            </p>
+                                        </div>
                                     </div>
-                                )}
-                            </div>
+                                    {post.user_id === user_id && (
+                                        <div className="flex items-center">
+                                            <EditButton to={`/posts/edit/${post.id}`} className="mr-2">Edit</EditButton>
+                                            <DeleteButton to={`/posts/${post.id}`}>Delete</DeleteButton>
+                                        </div>
+                                    )}
+                                </div>
                             </Link>
                         ))}
                     </div>

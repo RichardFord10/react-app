@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from '@inertiajs/react'; 
+import { useForm } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -16,7 +16,7 @@ export default function EditForm({ post }) {
         e.preventDefault();
         patch(`/posts/edit/${data.id}`);
     };
-    
+
     return (
         <div className="py-12">
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -28,6 +28,14 @@ export default function EditForm({ post }) {
                         </p>
                     </header>
                     <form onSubmit={handleSubmit}>
+                        <div className="mt-4">
+                            <InputLabel value="Image" />
+                            <div className="flex space-x-4 mt-1">
+                            {post.images && post.images.length > 0 && (
+                            <img src={`/storage/${post.images[0].image_path}`} alt="Post Thumbnail" className="w-full h-auto rounded-lg" />
+                        )}
+                            </div>
+                        </div>
                         <div className="mt-4">
                             <InputLabel htmlFor="title" value="Title" />
                             <TextInput

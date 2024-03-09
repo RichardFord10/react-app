@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ImageController;
 use Inertia\Inertia;
 
 /*
@@ -35,6 +36,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
     Route::resource('posts', PostController::class);
+    Route::post('/upload-image', [ImageController::class, 'store']);
     Route::resource('comments', CommentsController::class);
     Route::get('/posts/{postId}/comments', [CommentsController::class, 'index']);
     Route::get('/posts/{id}', 'PostController@show')->name('posts.show');

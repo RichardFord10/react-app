@@ -12,6 +12,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        username: '',
     });
 
     useEffect(() => {
@@ -32,6 +33,22 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
+
+                    <InputLabel htmlFor="username" value="Username" />
+                    <TextInput
+                        id="username"
+                        name="username"
+                        value={data.username}
+                        className="mt-1 block w-full"
+                        autoComplete="username"
+                        isFocused={true}
+                        onChange={(e) => setData('username', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.name} className="mt-2" />
+                </div>
+                <div className='mt-4'>
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput

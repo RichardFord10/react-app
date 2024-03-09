@@ -11,10 +11,8 @@ function Post({ post, auth }) {
                         <header>
                             <h2 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-center text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{post.title}</h2>
                         </header>
-                        {post.image && (
-                            <div className="flex justify-center mt-4">
-                                <img src={`/storage/images/${post.image}`} alt="Post Image" className="max-w-full h-40 rounded-lg" />
-                            </div>
+                        {post.images && post.images.length > 0 && (
+                            <img src={`/storage/${post.images[0].image_path}`} alt="Post Thumbnail" className="w-full h-auto rounded-lg" />
                         )}
                         <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                             <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-300">

@@ -17,7 +17,7 @@ function CommentsList({ postId }) {
                 console.error('Error fetching comments:', error);
             }
         };
-
+        
         fetchComments();
     }, [postId]);
 
