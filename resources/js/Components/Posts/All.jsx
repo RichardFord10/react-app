@@ -14,8 +14,8 @@ class Posts extends React.Component {
                             <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Posts</h2>
                         </header>
                         {posts.map(post => (
-                            <Link href={`/posts/${post.id}`}>
-                                <div key={post.id} className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center">
+                            <Link key={post.id} href={`/posts/${post.id}`}>
+                                <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center">
                                     <div className="flex items-center">
                                         {post.images.length > 0 && ( // Check if the post has any images
                                             <img src={`/storage/${post.images[0].image_path}`} alt="Post Thumbnail" className="w-16 h-16 rounded mr-4" />

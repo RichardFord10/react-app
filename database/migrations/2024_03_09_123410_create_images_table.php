@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique()->nullable(); 
+            $table->uuid('uuid')->unique()->nullable();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('image');
             $table->string('image_path');

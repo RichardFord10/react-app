@@ -16,11 +16,11 @@ function Comment({ user, postId }) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': window.csrfToken, 
+                    'X-CSRF-TOKEN': window.csrfToken,
                 },
                 body: JSON.stringify({
-                    body: comment, 
-                    post_id: postId, 
+                    body: comment,
+                    post_id: postId,
                     user_id: user.id,
                 }),
             });

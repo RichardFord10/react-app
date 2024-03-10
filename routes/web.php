@@ -35,17 +35,20 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('posts', PostController::class);
+    Route::patch('/image/{id}', [ImageController::class, 'update'])->name('image.update');
     Route::post('/upload-image', [ImageController::class, 'store']);
+    Route::resource('/posts', PostController::class);
+    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+    Route::delete('/posts', [ProfileController::class, 'destroy'])->name('posts.destroy');
+    Route::delete('/delete-image/{id}', [ImageController::class, 'destroy'])->name('image.delete');
     Route::resource('comments', CommentsController::class);
     Route::get('/posts/{postId}/comments', [CommentsController::class, 'index']);
-    Route::get('/posts/{id}', 'PostController@show')->name('posts.show');
-    Route::delete('/posts', [ProfileController::class, 'destroy'])->name('posts.destroy');
-    Route::patch('/posts/edit/{id}', [PostController::class, 'update'])->name('posts.update');
+    Route::patch('/posts/update/{id}', [PostController::class, 'update'])->name('posts.update');
     Route::get('/posts/edit/{id}', [PostController::class, 'edit'])->name('posts.edit');
+    Route::patch('/posts/edit/{id}', [PostController::class, 'update'])->name('posts.edit');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

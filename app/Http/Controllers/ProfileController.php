@@ -39,10 +39,6 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $this->uploadImage($request);
-        }
-
         return Redirect::route('profile.edit');
     }
 
@@ -65,21 +61,5 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
-    }
-
-    public function uploadImage(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'image' => ['required', 'image'],
-        ]);
-    
-        $imagePath = $request->file('image')->store('public/images/user_images');
-    
-        $userImage = new UserImage();
-        $userImage->user_id = $request->user()->id;
-        $userImage->image_path = $imagePath;
-        $userImage->save();
-    
-        return Redirect::route('profile.edit');
     }
 }
