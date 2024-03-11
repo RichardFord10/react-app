@@ -17,15 +17,10 @@ export default function CreateForm() {
         uuid: postUuid,
     });
 
-
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
         post('/posts', data);
     };
-
-
 
     return (
 

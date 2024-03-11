@@ -35,8 +35,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::patch('/image/{id}', [ImageController::class, 'update'])->name('image.update');
-    Route::post('/upload-image', [ImageController::class, 'store']);
+    Route::put('/update-image/{id}', [ImageController::class, 'update'])->name('image.update');
+    Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::resource('/posts', PostController::class);
     Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
     Route::delete('/posts', [ProfileController::class, 'destroy'])->name('posts.destroy');

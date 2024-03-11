@@ -77,8 +77,8 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::with('images')->findOrFail($id);
-        Log::info("Post Controller edit");
-        Log::info($post);
+        // Log::info("Post Controller edit");
+        // Log::info($post);
         return Inertia::render('Posts/Edit', [
             'post' => $post
         ]);

@@ -4,7 +4,9 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import ImageUpload from '../ImageUpload';
+import ImageUpload from '@/Components/ImageUpload';
+import ImageUpdate from '@/Components/ImageUpdate';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function EditForm({ post }) {
     const { data, setData, patch, processing, errors } = useForm({
@@ -66,15 +68,19 @@ export default function EditForm({ post }) {
                     <div className="mt-4 grid grid-cols-3 gap-4">
 
                         {post.images && post.images.map((image, index) => (
-                            <div key={index}>
-                                <ImageUpload
-                                    entityType="App\Models\Post"
-                                    entityId={post.id}
-                                    currentImage={"/storage/" + image.image_path}
-                                    imageId={image.id}
-                                />
+                            <div key={image.id}>
+                                {post.images && post.images.map((image, index) => (
+                                    <ImageUpdate
+                                        key={index}
+                                        image={image}
+                                        uuid={uuidv4()}
+                                        onRemove={() => handleRemove(image.id)}
+                                        onUpdate={() => handleUpdate(image.id)}
+                                    />
+                                ))}
                             </div>
                         ))}
+                        <ImageUpload entityType="App\Models\Post" type="post" uuid={uuidv4()} entityId={post.id} />
                     </div>
                 </div>
             </div>
