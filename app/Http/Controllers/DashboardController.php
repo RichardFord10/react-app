@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $posts = $user->posts;
+        $posts = $user->posts()->with('images')->get();
 
         return Inertia::render('Dashboard', [
             'auth' => [

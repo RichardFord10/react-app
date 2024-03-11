@@ -6,15 +6,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Image;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Post;
-use Inertia\Inertia;
 
 class ImageController extends Controller
 {
     public function store(Request $request)
     {
-        Log::info('ImageController@store', ['request' => $request->all()]);
         try {
             $request->validate([
                 'image' => 'required|image',
