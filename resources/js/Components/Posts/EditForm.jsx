@@ -67,18 +67,14 @@ export default function EditForm({ post }) {
                     </form>
                     <div className="mt-4 grid grid-cols-3 gap-4">
 
-                        {post.images && post.images.map((image, index) => (
-                            <div key={image.id}>
-                                {post.images && post.images.map((image, index) => (
-                                    <ImageUpdate
-                                        key={index}
-                                        image={image}
-                                        uuid={uuidv4()}
-                                        onRemove={() => handleRemove(image.id)}
-                                        onUpdate={() => handleUpdate(image.id)}
-                                    />
-                                ))}
-                            </div>
+                        {post.images && post.images.map((image) => (
+                            <ImageUpdate
+                                key={image.id}
+                                uuid={uuidv4()}
+                                image={image}
+                                onRemove={() => handleRemove(image.id)}
+                                onUpdate={() => handleUpdate(image.id)}
+                            />
                         ))}
                         <ImageUpload entityType="App\Models\Post" type="post" uuid={uuidv4()} entityId={post.id} />
                     </div>
