@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ImageController;
 use Inertia\Inertia;
 
@@ -36,16 +36,17 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
     Route::put('/update-image/{id}', [ImageController::class, 'update'])->name('image.update');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
-    Route::resource('/posts', PostController::class);
+    // Route::resource('/posts', PostController::class);
     Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
-    Route::delete('/posts', [ProfileController::class, 'destroy'])->name('posts.destroy');
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::delete('/delete-image/{id}', [ImageController::class, 'destroy'])->name('image.delete');
     Route::resource('comments', CommentsController::class);
     Route::get('/posts/{postId}/comments', [CommentsController::class, 'index']);
     Route::patch('/posts/update/{id}', [PostController::class, 'update'])->name('posts.update');
     Route::get('/posts/edit/{id}', [PostController::class, 'edit'])->name('posts.edit');
-    Route::patch('/posts/edit/{id}', [PostController::class, 'update'])->name('posts.edit');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
