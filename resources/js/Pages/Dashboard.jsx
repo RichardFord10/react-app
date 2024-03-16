@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import Posts from '@/Components/Posts/All';
+import Posts from '@/Pages/Posts/All';
 import Orders from '@/Pages/Orders/All';
 
 export default function Dashboard({ auth }) {

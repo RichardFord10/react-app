@@ -13,9 +13,10 @@ class PostController extends Controller
 
     public function index()
     {
+        $user = auth()->user();
         $posts = Post::with('images')->get();
 
-        return Inertia::render('Posts/Feed', ['posts' => $posts, 'user_id' => auth()->id()]);
+        return Inertia::render('Posts/Index', ['posts' => $posts, 'user_id' => auth()->id()]);
     }
 
     public function store(Request $request)
@@ -48,7 +49,7 @@ class PostController extends Controller
 
     public function create()
     {
-        return Inertia::render('Posts/Create');
+        return Inertia::render('Posts/CreateForm');
     }
 
     public function show($id)
@@ -77,8 +78,8 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::with('images')->findOrFail($id);
-        // Log::info("Post Controller edit");
-        // Log::info($post);
+        Log::info("Post Controller edit");
+        Log::info($post);
         return Inertia::render('Posts/Edit', [
             'post' => $post
         ]);

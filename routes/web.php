@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     // Route::resource('/posts', PostController::class);
     Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::delete('/delete-image/{id}', [ImageController::class, 'destroy'])->name('image.delete');
