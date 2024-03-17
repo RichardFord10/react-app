@@ -8,7 +8,6 @@ export default function ImageUpdate({ image }) {
     const { post, processing, reset } = useForm({
         image: null,
     });
-    console.log(image)
     const updateImage = (event) => {
         const file = event.target.files[0];
         if (file) {

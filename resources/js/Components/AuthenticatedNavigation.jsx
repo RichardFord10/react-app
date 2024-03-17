@@ -27,8 +27,8 @@ export default function AuthenticatedNavigation({ user }) {
                             <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                 Dashboard
                             </NavLink>
-                            <NavLink href={route('store.configure')} active={route().current('post.index')}>
-                                Configure Store
+                            <NavLink href={route('store-settings.index')} active={route().current('store-settings.index')}>
+                                Store Settings
                             </NavLink>
                             <NavLink href={route('posts.index')} active={route().current('post.index')}>
                                 Posts

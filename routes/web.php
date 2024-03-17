@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StoreSettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\PostController;
@@ -38,6 +39,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 //auth routes
 Route::middleware('auth')->group(function () {
+    Route::get('/store-settings', [StoreSettingsController::class, 'index'])->name('store-settings.index');
+    Route::post('/store-settings', [StoreSettingsController::class, 'store'])->name('store-settings.store');
     Route::get('/images/{id}', [ImageController::class, 'show']);
     Route::put('/update-image/{id}', [ImageController::class, 'update'])->name('image.update');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
