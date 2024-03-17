@@ -49,7 +49,7 @@ class PostController extends Controller
 
     public function create()
     {
-        return Inertia::render('Posts/CreateForm');
+        return Inertia::render('Posts/CreateForm', ['user_id' => auth()->id()]);
     }
 
     public function show($id)
@@ -78,10 +78,9 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::with('images')->findOrFail($id);
-        Log::info("Post Controller edit");
-        Log::info($post);
-        return Inertia::render('Posts/Edit', [
-            'post' => $post
+        return Inertia::render('Posts/EditForm', [
+            'post' => $post,
+            'user_id' => auth()->id()
         ]);
     }
 

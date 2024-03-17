@@ -4,31 +4,32 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import ImageUploading from "react-images-uploading";
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import ImageUpload from '@/Components/ImageUpload';
+import ImageUpdate from '@/Components/ImageUpdate';
+import React, { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
     const maxNumber = 1;
+    const [image, setImage] = useState(null);
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
         email: user.email,
+        image_path: user.image_path,
     });
-    const [images, setImages] = React.useState([]);
+
+    const imageObject = {
+        id: user.image_id,
+        image_path: user.image_path,
+    };
+
 
     const submit = (e) => {
         e.preventDefault();
 
         patch(route('profile.update'));
-    };
-
-    const onChange = (imageList, addUpdateIndex) => {
-        // data for submit
-        console.log(imageList, addUpdateIndex);
-        setImages(imageList);
     };
 
     return (
@@ -41,53 +42,17 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </p>
 
             </header>
-
+            <div className="flex justify-center py-2">
+                <div className="rounded-full">
+                    {
+                        user.image_path ?
+                            <ImageUpdate image={imageObject} /> :
+                            <ImageUpload entityType="App\Models\User" type="user" uuid={uuidv4()} entityId={user.id} />
+                    }
+                </div>
+            </div>
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <div className="flex justify-center">
-                        <div className="rounded-full overflow-hidden">
-                            <ImageUploading
-                                multiple
-                                value={images}
-                                onChange={onChange}
-                                maxNumber={maxNumber}
-                                dataURLKey="data_url"
-                                acceptType={["jpg", "gif", "png"]}
-                            >
-                                {({
-                                    imageList,
-                                    onImageUpload,
-                                    onImageRemoveAll,
-                                    onImageUpdate,
-                                    onImageRemove,
-                                    isDragging,
-                                    dragProps
-                                }) => (
-                                    <div className="upload__image-wrapper">
-                                        <button
-                                            style={isDragging ? { color: "red" } : null}
-                                            onClick={onImageUpload}
-                                            {...dragProps}
-                                        >
-                                              <FontAwesomeIcon className="text-white" icon={faUserCircle} />
-                                        </button>
-                                        &nbsp;
-                                        {/* <button onClick={onImageRemoveAll}>Remove</button> */}
-                                        {imageList.map((image, index) => (
-                                            <div key={index} className="image-item">
-                                                <img src={image.data_url} alt="" width="100" />
-                                                <div className="image-item__btn-wrapper">
-                                                    <button onClick={() => onImageUpdate(index)}>Update</button>
-                                                    <button onClick={() => onImageRemove(index)}>Remove</button>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </ImageUploading>
-                        </div>
-                    </div>
-
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput

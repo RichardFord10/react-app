@@ -6,9 +6,9 @@ import { router } from '@inertiajs/react';
 
 export default function ImageUpdate({ image }) {
     const { post, processing, reset } = useForm({
-        image: null, // Initialize 'image' within the form data
+        image: null,
     });
-
+    console.log(image)
     const updateImage = (event) => {
         const file = event.target.files[0];
         if (file) {

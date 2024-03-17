@@ -3,9 +3,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Image;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class ImageController extends Controller
 {
@@ -22,10 +24,8 @@ class ImageController extends Controller
 
             // Process and store the image
             $path = $request->file('image')->store('images', 'public');
-
-            //if uuid does not match imageable_id, then it is a temp image and we are adding to an existing post
             $is_temp = $request->imageable_id == $request->uuid ? true : false;
-            Log::info('ImageController@store', ['is_temp' => $is_temp]);
+
             $image = new Image([
                 'uuid' => $request->uuid,
                 'image' => $request->file('image')->hashName(),
@@ -36,12 +36,27 @@ class ImageController extends Controller
                 'imageable_type' => $request->imageable_type,
                 'imageable_id' => $request->imageable_id,
             ]);
-            Log::info('ImageController@store', ['image' => $image]);
-            if ($image->save()) {
-                Log::info('Image uploaded successfully', ['image' => $image]);
+
+            if ($image->save() && $request->type === 'user') {
+                Log::info('ImageController@store', ['image' => $image]);
+                $this->processUserImages($image->id, $path);
             }
         } catch (\Exception $e) {
             Log::error('ImageController@store', ['error' => $e->getMessage()]);
+        }
+    }
+
+    // The rest of your methods remain unchanged
+
+    public function processUserImages($id, $path)
+    {
+        $user = Auth::user();
+        if ($user) {
+            $user->image_id = $id;
+            $user->image_path = $path;
+            $user->save();
+        } else {
+            Log::error('No authenticated user found');
         }
     }
 
@@ -65,5 +80,11 @@ class ImageController extends Controller
     {
         $image = Image::findOrFail($id);
         $image->delete();
+    }
+
+    public function show($id)
+    {
+        $image = Image::findOrFail($id, ['id', 'image_path']);
+        return response()->json($image);
     }
 }

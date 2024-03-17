@@ -14,14 +14,21 @@ export default function AuthenticatedNavigation({ user }) {
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="shrink-0 flex items-center">
-                            <Link href="/">
-                                <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                            <Link href="/dashboard">
+                                {
+                                    user.image_path ?
+                                        <img src={`/storage/${user.image_path}`} alt="User" className="rounded-full object-cover h-10 w-10" /> :
+                                        <ApplicationLogo className="h-10 w-10" />
+                                }
                             </Link>
                         </div>
 
                         <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                             <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                 Dashboard
+                            </NavLink>
+                            <NavLink href={route('store.configure')} active={route().current('post.index')}>
+                                Configure Store
                             </NavLink>
                             <NavLink href={route('posts.index')} active={route().current('post.index')}>
                                 Posts
