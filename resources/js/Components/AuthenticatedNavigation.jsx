@@ -104,7 +104,10 @@ export default function AuthenticatedNavigation({ user }) {
                     <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                         Dashboard
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('posts.index')} active={route().current('post.index')}>
+                    <ResponsiveNavLink href={route('store-settings.index')} active={route().current('store-settings.index')}>
+                        Store Settings
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink href={route('posts.index')} active={route().current('posts.index')}>
                         Posts
                     </ResponsiveNavLink>
                 </div>
