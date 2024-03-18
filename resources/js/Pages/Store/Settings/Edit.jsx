@@ -19,6 +19,11 @@ export default function Edit({ storeSettings }) {
         contact_phone: storeSettings.contact_phone || '',
     });
 
+    const imageObject = {
+        id: storeSettings.id,
+        image_path: storeSettings.store_logo,
+    };
+
     const submit = (e) => {
         e.preventDefault();
         post(route('store-settings.update', storeSettings.id));
@@ -27,14 +32,14 @@ export default function Edit({ storeSettings }) {
     console.log(storeSettings)
 
     return (
-        < div className="py-12" >
+        <div className="py-12" >
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                     <div className="flex justify-center py-2">
                         <div className="rounded-full">
                             {
                                 storeSettings.store_logo ?
-                                    <ImageUpdate image={storeSettings.store_logo} entityType="App\Models\StoreSetting" entityId={storeSettings.id} /> :
+                                    <ImageUpdate image={imageObject} entityType="App\Models\StoreSetting" entityId={storeSettings.id} /> :
                                     <ImageUpload entityType="App\Models\StoreSetting" type="store_logo" uuid={uuidv4()} entityId={storeSettings.id} />
                             }
                         </div>
@@ -116,9 +121,9 @@ export default function Edit({ storeSettings }) {
                                 <p className="text-sm text-gray-600">Settings Saved.</p>
                             </Transition>
                         </div>
+                    </form>
                 </div>
-            </form>
-        </div>
+            </div >
         </div >
     );
 }

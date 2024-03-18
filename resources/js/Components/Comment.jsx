@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
-function Comment({ user, postId }) {
+function Comment({ user, postId, addComment }) {
     const [comment, setComment] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            if (comment.trim() === '') {
-                console.log('Comment cannot be empty');
-                return;
-            }
+        if (comment.trim() === '') {
+            console.log('Comment cannot be empty');
+            return;
+        }
 
+        try {
             const response = await fetch('/comments', {
                 method: 'POST',
                 headers: {
@@ -26,7 +26,8 @@ function Comment({ user, postId }) {
             });
 
             if (response.ok) {
-                console.log('Comment submitted successfully');
+                const newComment = await response.json();
+                addComment(newComment);
                 setComment('');
             } else {
                 console.error('Failed to submit comment:', response.statusText);
@@ -42,7 +43,7 @@ function Comment({ user, postId }) {
             <h3 className="text-lg font-semibold mb-2 dark:border-gray-600 rounded-md focus:outline-none dark:text-gray-200">Leave a Comment</h3>
             <form onSubmit={handleSubmit}>
                 <div className="flex items-center mb-4">
-                    <img src={user.avatar} alt="User Avatar" className="w-8 h-8 rounded-full mr-2" />
+                    <img src={`/storage/${user.image_path}`} alt="User Avatar" className="w-8 h-8 rounded-full mr-2" />
                     <span className="text-gray-700 dark:text-gray-300">{user.name}</span>
                 </div>
                 <textarea

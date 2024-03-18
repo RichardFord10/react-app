@@ -16,7 +16,7 @@ class CommentsController extends Controller
         return response()->json(['comments' => $comments]);
     }
 
-    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -25,13 +25,14 @@ class CommentsController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        // Create a new comment instance
         $comment = new Comment();
         $comment->body = $request->body;
         $comment->post_id = $request->post_id;
         $comment->user_id = $request->user_id;
         $comment->save();
 
-        return response()->json(['message' => 'Comment created successfully'], 201);
+        $comment->load('user');
+
+        return response()->json($comment, 201); // Return the new comment with the user object
     }
 }
