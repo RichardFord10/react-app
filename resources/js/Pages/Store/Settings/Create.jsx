@@ -11,20 +11,38 @@ import { Link, useForm, usePage } from '@inertiajs/react';
 import EditButton from '@/Components/EditButton';
 
 
-const CreateStoreSettings = ({ auth }) => {
+const CreateStoreSettings = ({ auth, storeSettings }) => {
     const { data, setData, post, errors, processing, wasSuccessful } = useForm({
         store_name: '',
+        store_slug: '',
         about_us: '',
         contact_email: '',
         contact_phone: '',
     });
+
+    const [showForm, setShowForm] = useState(false);
 
     const submit = (e) => {
         EditButton
         e.preventDefault();
         post(route('store-settings.store'));
     };
-
+    if (storeSettings) {
+        // Show store settings if they exist
+        return (
+            <div>
+                {/* Render your store settings here */}
+                <div>Store Name: {storeSettings.store_name}</div>
+                {/* Add more details as needed */}
+            </div>
+        );
+    } else if (!showForm) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <PrimaryButton onClick={() => setShowForm(true)}>Create Store</PrimaryButton>
+            </div>
+        );
+    }
     return (
         <div className="py-12">
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -45,7 +63,20 @@ const CreateStoreSettings = ({ auth }) => {
                             />
                             <InputError message={errors.store_name} />
                         </div>
-
+                        {/* Store Slug Input */}
+                        <div>
+                            <InputLabel htmlFor="store_slug" value="Store URL Slug (Your store will be available at /slug-value, use dashes to seperate words)" />
+                            <TextInput
+                                id="store_slug"
+                                className="mt-1 block w-full"
+                                value={data.store_slug}
+                                onChange={e => setData('store_slug', e.target.value)}
+                                required
+                                pattern="[A-Za-z0-9-]+" // Simple pattern to allow only letters, numbers, and hyphens
+                                title="Slug can only contain letters, numbers, and hyphens."
+                            />
+                            <InputError message={errors.store_slug} />
+                        </div>
                         {/* About Us Input */}
                         <div>
                             <InputLabel htmlFor="about_us" value="About Us" />

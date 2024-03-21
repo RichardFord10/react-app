@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StoreSettings;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,14 +19,15 @@ class StoreSettingsController extends Controller
     {
         $userId = Auth::id();
 
-        $storeSettings = StoreSettings::where('user_id', $userId)->first(); // Retrieve the store settings for the user
+        $storeSettings = StoreSettings::where('user_id', $userId)->first();
 
         if (!$storeSettings) {
-            return Inertia::render('Store/Settings/Create', [
+            return Inertia::render('Store/Settings/Index', [
+                'storeSettings' => null,
                 'user_id' => $userId
+
             ]);
         } else {
-
             return Inertia::render('Store/Settings/Index', [
                 'storeSettings' => $storeSettings,
                 'user_id' => auth()->id()
@@ -51,26 +53,32 @@ class StoreSettingsController extends Controller
     {
         Log::info('Store settings request data: ' . json_encode($request->all()));
 
-        // Validate the incoming request data
         $validatedData = $request->validate([
             'store_name' => 'required|string|max:255',
             'about_us' => 'nullable|string',
             'contact_email' => 'required|email|max:255',
             'contact_phone' => 'nullable|string|max:255',
+            'store_slug' => 'required|string|max:255',
         ]);
 
-        // Create a new store settings instance and fill it with validated data
-        $storeSettings = new StoreSettings($validatedData);
+        $store = Store::updateOrCreate(
+            ['user_id' => auth()->id()],
+            [
+                'store_name' => $validatedData['store_name'],
+                'store_slug' => $validatedData['store_slug'],
+                'status' => 'active'
+            ]
+        );
 
-        $storeImage =
-            // Assuming you have authentication and a user relation set up
-            $storeSettings->user_id = auth()->id();
+        $validatedData['store_id'] = $store->id;
+        $validatedData['user_id'] = auth()->id();
 
-        // Save the store settings
-        $storeSettings->save();
+        $storeSettings = StoreSettings::create($validatedData);
 
-        // Redirect back or to another page, possibly with a success message
-        return Inertia::render('store-settings.index',)->with('message', 'Store settings created successfully.');
+        return Inertia::render('Store/Settings/Index', [
+            'storeSettings' => $storeSettings,
+            'message' => 'Store settings created successfully.'
+        ]);
     }
 
     /**
@@ -94,7 +102,30 @@ class StoreSettingsController extends Controller
      */
     public function update(Request $request, StoreSettings $storeSettings)
     {
-        //
+        $validatedData = $request->validate([
+            'store_name' => 'required|string|max:255',
+            'about_us' => 'nullable|string',
+            'contact_email' => 'required|email|max:255',
+            'contact_phone' => 'nullable|string|max:255',
+        ]);
+
+        // Update the Store model
+        $store = Store::where('id', $storeSettings->store_id)->first();
+        if ($store) {
+            $store->update([
+                'store_name' => $validatedData['store_name']
+                // Update other fields as necessary
+            ]);
+        }
+
+        // Update the store settings with the validated data
+        $storeSettings->update($validatedData);
+
+        // Redirect back or to another page, possibly with a success message
+        return Inertia::render('Store/Settings/Index', [
+            'storeSettings' => $storeSettings,
+            'message' => 'Store settings updated successfully.'
+        ]);
     }
 
     /**

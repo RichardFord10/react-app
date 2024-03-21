@@ -11,6 +11,7 @@ class StoreSettings extends Model
 
     protected $fillable = [
         'user_id',
+        'store_id',
         'store_name',
         'store_logo',
         'store_banner',

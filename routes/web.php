@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StoreSettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CommentsController;
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::resource('/posts', PostController::class);
+    Route::resource('/store', StoreController::class);
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
@@ -59,5 +61,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+//non auth routes
+Route::get('/{storeName}', 'StoreController@show')->where('storeName', '.*');
 
 require __DIR__ . '/auth.php';

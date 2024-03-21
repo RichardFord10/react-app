@@ -32,7 +32,7 @@ export default function CreateForm({ auth }) {
                             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                                 Say something interesting!
                             </p>
-                            <ImageUpload entityType="App\Models\Post" type="post" entityId={postUuid} uuid={postUuid} />
+                            <ImageUpload entityType="App\Models\Post" type="post" entityId={postUuid} uuid={postUuid} showPreview={true} />
                         </header>
                         <form onSubmit={handleSubmit}>
                             <div className="mt-4">
