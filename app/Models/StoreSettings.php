@@ -12,6 +12,7 @@ class StoreSettings extends Model
     protected $fillable = [
         'user_id',
         'store_id',
+        'active',
         'store_name',
         'store_logo',
         'store_banner',
@@ -25,4 +26,14 @@ class StoreSettings extends Model
         'seo_settings',
         'analytics_code',
     ];
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
 }

@@ -9,7 +9,7 @@ import ImageUpload from '@/Components/ImageUpload';
 import { v4 as uuidv4 } from 'uuid';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import EditButton from '@/Components/EditButton';
-
+import Checkbox from '@/Components/Checkbox';
 
 const CreateStoreSettings = ({ auth, storeSettings }) => {
     const { data, setData, post, errors, processing, wasSuccessful } = useForm({
@@ -18,13 +18,16 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
         about_us: '',
         contact_email: '',
         contact_phone: '',
+        active: false,
     });
 
     const [showForm, setShowForm] = useState(false);
+    const [isActive, setIsActive] = useState(false);
 
     const submit = (e) => {
         EditButton
         e.preventDefault();
+        setData('active', isActive);
         post(route('store-settings.store'));
     };
     if (storeSettings) {
@@ -51,6 +54,15 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
                         <ImageUpload entityType="App\Models\StoreSettings" type="store_logo" uuid={uuidv4()} entityId={auth.user.id} showPreview={true} />
                     </div>
                     <form onSubmit={submit} className="mt-6 space-y-6">
+                        {/* Store Active Input */}
+                        <InputLabel htmlFor="active" value="Active" />
+                        <div>
+                            <Checkbox
+                                id="active"
+                                checked={isActive}
+                                onChange={(e) => setIsActive(e.target.checked)}
+                            />
+                        </div>
                         {/* Store Name Input */}
                         <div>
                             <InputLabel htmlFor="store_name" value="Store Name" />

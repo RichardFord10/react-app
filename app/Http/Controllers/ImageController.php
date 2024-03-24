@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Models\StoreSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,9 @@ class ImageController extends Controller
             if ($image->save() && $request->type === 'user') {
                 Log::info('ImageController@store', ['image' => $image]);
                 $this->processUserImages($image->id, $path);
+            } elseif ($image->save() && $request->type === 'store_logo') {
+                Log::info('ImageController@store', ['image' => $image]);
+                $this->processStoreImages($path);
             }
         } catch (\Exception $e) {
             Log::error('ImageController@store', ['error' => $e->getMessage()]);
@@ -60,6 +64,16 @@ class ImageController extends Controller
         }
     }
 
+    public function processStoreImages($path)
+    {
+        $store = StoreSettings::where('user_id', Auth::id())->first();
+        if ($store) {
+            $store->store_logo = $path;
+            $store->save();
+        } else {
+            Log::error('No store found for authenticated user');
+        }
+    }
     public function update(Request $request, $id)
     {
 

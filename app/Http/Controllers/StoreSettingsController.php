@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\StoreSettings;
 use App\Models\Store;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -19,18 +20,24 @@ class StoreSettingsController extends Controller
     {
         $userId = Auth::id();
 
-        $storeSettings = StoreSettings::where('user_id', $userId)->first();
+        // Eager load the 'store' relationship along with 'images'
+        $storeSettings = StoreSettings::with(['store', 'images' => function ($query) use ($userId) {
+            $query->where('user_id', $userId)->where('type', 'store_logo');
+        }])->where('user_id', $userId)->first();
 
+        // Check if storeSettings was found
         if (!$storeSettings) {
             return Inertia::render('Store/Settings/Index', [
                 'storeSettings' => null,
                 'user_id' => $userId
-
             ]);
         } else {
+            // Assuming you want to add 'store_slug' directly to your $storeSettings object for convenience
+            $storeSettings->store_slug = $storeSettings->store ? $storeSettings->store->store_slug : null;
+
             return Inertia::render('Store/Settings/Index', [
                 'storeSettings' => $storeSettings,
-                'user_id' => auth()->id()
+                'user_id' => $userId,
             ]);
         }
     }
@@ -51,7 +58,6 @@ class StoreSettingsController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info('Store settings request data: ' . json_encode($request->all()));
 
         $validatedData = $request->validate([
             'store_name' => 'required|string|max:255',
@@ -59,6 +65,7 @@ class StoreSettingsController extends Controller
             'contact_email' => 'required|email|max:255',
             'contact_phone' => 'nullable|string|max:255',
             'store_slug' => 'required|string|max:255',
+            'active' => 'required|boolean',
         ]);
 
         $store = Store::updateOrCreate(
@@ -66,18 +73,19 @@ class StoreSettingsController extends Controller
             [
                 'store_name' => $validatedData['store_name'],
                 'store_slug' => $validatedData['store_slug'],
-                'status' => 'active'
+                'status' => $validatedData['active'] ? 'active' : 'inactive',
             ]
         );
 
+        $image = Image::where('user_id', auth()->id())->where('type', 'store_logo')->first();
         $validatedData['store_id'] = $store->id;
         $validatedData['user_id'] = auth()->id();
-
-        $storeSettings = StoreSettings::create($validatedData);
-
+        $validatedData['store_logo'] = $image ? $image->image_path : null;
+        $storeSettings = StoreSettings::updateOrCreate(['user_id' => auth()->id()], $validatedData);
+        Log::info('validate_data', $validatedData);
         return Inertia::render('Store/Settings/Index', [
             'storeSettings' => $storeSettings,
-            'message' => 'Store settings created successfully.'
+            'message' => 'Store settings changed successfully.'
         ]);
     }
 
@@ -102,11 +110,13 @@ class StoreSettingsController extends Controller
      */
     public function update(Request $request, StoreSettings $storeSettings)
     {
+
         $validatedData = $request->validate([
             'store_name' => 'required|string|max:255',
             'about_us' => 'nullable|string',
             'contact_email' => 'required|email|max:255',
             'contact_phone' => 'nullable|string|max:255',
+            'active' => 'required|boolean',
         ]);
 
         // Update the Store model
@@ -114,7 +124,6 @@ class StoreSettingsController extends Controller
         if ($store) {
             $store->update([
                 'store_name' => $validatedData['store_name']
-                // Update other fields as necessary
             ]);
         }
 
@@ -134,5 +143,10 @@ class StoreSettingsController extends Controller
     public function destroy(StoreSettings $storeSettings)
     {
         //
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

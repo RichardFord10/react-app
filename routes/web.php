@@ -63,6 +63,6 @@ Route::middleware('auth')->group(function () {
 });
 
 //non auth routes
-Route::get('/{storeName}', 'StoreController@show')->where('storeName', '.*');
+// Route::get('/{storeName}', 'StoreController@show')->where('storeName', '.*');
 
 require __DIR__ . '/auth.php';

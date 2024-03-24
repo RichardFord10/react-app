@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('store_settings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('active')->default(false);
             $table->string('store_name');
             $table->string('store_logo')->nullable();
             $table->string('store_banner')->nullable();

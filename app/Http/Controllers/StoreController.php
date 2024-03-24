@@ -36,7 +36,7 @@ class StoreController extends Controller
      */
     public function show(Store $store)
     {
-        return Inertia::render('Store/StoreFrontIndex', ['store' => $store]);
+        return Inertia::render('Store/StoreFront/Index', ['store' => $store]);
     }
 
     /**

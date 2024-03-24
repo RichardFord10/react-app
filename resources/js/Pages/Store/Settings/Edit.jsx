@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import React, { useState } from 'react';
 import ImageUpdate from '@/Components/ImageUpdate';
 import ImageUpload from '@/Components/ImageUpload';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +11,7 @@ import TextArea from '@/Components/TextArea';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { Transition } from '@headlessui/react';
+import Checkbox from '@/Components/Checkbox';
 
 export default function Edit({ storeSettings }) {
     const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
@@ -17,6 +19,8 @@ export default function Edit({ storeSettings }) {
         about_us: storeSettings.about_us || '',
         contact_email: storeSettings.contact_email || '',
         contact_phone: storeSettings.contact_phone || '',
+        active: storeSettings.active || false,
+        store_slug: storeSettings.store_slug || '',
     });
 
     const imageObject = {
@@ -26,11 +30,11 @@ export default function Edit({ storeSettings }) {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('store-settings.update', storeSettings.id));
+        post(route('store-settings.store'));
     };
 
-    console.log(storeSettings)
-
+    const [isActive, setIsActive] = useState(storeSettings.active || false);
+    console.log("Edit", storeSettings)
     return (
         <div className="py-12" >
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -40,14 +44,22 @@ export default function Edit({ storeSettings }) {
                             {
                                 storeSettings.store_logo ?
                                     <ImageUpdate image={imageObject} entityType="App\Models\StoreSetting" entityId={storeSettings.id} /> :
-                                    <ImageUpload entityType="App\Models\StoreSetting" type="store_logo" uuid={uuidv4()} entityId={storeSettings.id} />
+                                    <ImageUpload entityType="App\Models\StoreSettings" type="store_logo" uuid={uuidv4()} entityId={storeSettings.id} />
                             }
                         </div>
                     </div>
                     <form onSubmit={submit} className="mt-6 space-y-6">
+                        {/* Store Active Input */}
+                        <InputLabel htmlFor="active" value="Active" />
+                        <div>
+                            <Checkbox
+                                id="active"
+                                checked={isActive}
+                                onChange={(e) => { setIsActive(e.target.checked); setData('active', e.target.checked) }}
+                            />
+                        </div>
                         <div>
                             <InputLabel htmlFor="store_name" value="Store Name" />
-
                             <TextInput
                                 id="store_name"
                                 className="mt-1 block w-full"
@@ -59,7 +71,20 @@ export default function Edit({ storeSettings }) {
 
                             <InputError className="mt-2" message={errors.store_name} />
                         </div>
-
+                        {/* Store Slug Input */}
+                        <div>
+                            <InputLabel htmlFor="store_slug" value="Store URL Slug (Your store will be available at /slug-value, use dashes to seperate words)" />
+                            <TextInput
+                                id="store_slug"
+                                className="mt-1 block w-full"
+                                value={data.store_slug}
+                                onChange={e => setData('store_slug', e.target.value)}
+                                required
+                                pattern="[A-Za-z0-9-]+" // Simple pattern to allow only letters, numbers, and hyphens
+                                title="Slug can only contain letters, numbers, and hyphens."
+                            />
+                            <InputError message={errors.store_slug} />
+                        </div>
                         <div>
                             <InputLabel htmlFor="about_us" value="About Us" />
 
