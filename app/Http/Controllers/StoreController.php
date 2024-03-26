@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class StoreController extends Controller
@@ -34,9 +35,11 @@ class StoreController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Store $store)
+    public function show($store_slug)
     {
-        return Inertia::render('Store/StoreFront/Index', ['store' => $store]);
+        $store = Store::where('store_slug', $store_slug)->firstOrFail();
+
+        return Inertia::render('Store/StoreFront/Index', ['store' => $store, $user = auth()->user()]);
     }
 
     /**

@@ -10,7 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import EditButton from '@/Components/EditButton';
 import Checkbox from '@/Components/Checkbox';
-
+import StatesDropdown from '@/Components/StatesDropdown';
+import CategoryDropdown from '@/Components/CategoryDropdown';
 const CreateStoreSettings = ({ auth, storeSettings }) => {
     const { data, setData, post, errors, processing, wasSuccessful } = useForm({
         store_name: '',
@@ -19,10 +20,31 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
         contact_email: '',
         contact_phone: '',
         active: false,
+        social_media_links: [],
+        payment_methods: [],
+        shipping_info: {},
+        tax_settings: {},
+        seo_settings: {},
+        analytics_code: '',
+        category: '',
+        country: '',
+        state: '',
+        city: '',
     });
 
     const [showForm, setShowForm] = useState(false);
     const [isActive, setIsActive] = useState(false);
+    const [selectedState, setSelectedState] = useState(data.state || ''); // Initialize with the current state if editing
+
+    const handleStateChange = (field, value) => {
+        setData(field, value);
+        if (field === 'state') {
+            setSelectedState(value);
+        } else if (field === 'category') {
+            setSelectedCategory(value);
+        }
+
+    };
 
     const submit = (e) => {
         EditButton
@@ -30,6 +52,8 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
         setData('active', isActive);
         post(route('store-settings.store'));
     };
+
+
     if (storeSettings) {
         // Show store settings if they exist
         return (
@@ -89,6 +113,9 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
                             />
                             <InputError message={errors.store_slug} />
                         </div>
+                        <div>
+                            <CategoryDropdown value={selectedState} onChange={handleStateChange} />
+                        </div>
                         {/* About Us Input */}
                         <div>
                             <InputLabel htmlFor="about_us" value="About Us" />
@@ -114,7 +141,6 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
                             />
                             <InputError message={errors.contact_email} />
                         </div>
-
                         {/* Contact Phone Input */}
                         <div>
                             <InputLabel htmlFor="contact_phone" value="Contact Phone" />
@@ -127,7 +153,32 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
                             />
                             <InputError message={errors.contact_phone} />
                         </div>
-
+                        <div>
+                            <InputLabel htmlFor="analytics_code" value="Analytics Code" />
+                            <TextInput
+                                id="analytics_code"
+                                className="mt-1 block w-full"
+                                value={data.analytics_code}
+                                onChange={e => setData('analytics_code', e.target.value)}
+                            />
+                            <InputError message={errors.analytics_code} />
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <StatesDropdown value={selectedState} onChange={handleStateChange} />
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="city" value="City" />
+                            <TextInput
+                                id="city"
+                                className="mt-1 block w-full"
+                                value={data.city}
+                                onChange={e => setData('store_slug', e.target.value)}
+                                required
+                                pattern="[A-Za-z0-9-]+"
+                                title="City"
+                            />
+                            <InputError message={errors.store_slug} />
+                        </div>
                         {/* Form Submission Button */}
                         <div className="flex items-center gap-4">
                             <PrimaryButton disabled={processing}>Create Store Settings</PrimaryButton>

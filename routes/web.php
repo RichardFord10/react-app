@@ -23,6 +23,7 @@ use Inertia\Inertia;
 |
 */
 
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -63,6 +64,6 @@ Route::middleware('auth')->group(function () {
 });
 
 //non auth routes
-// Route::get('/{storeName}', 'StoreController@show')->where('storeName', '.*');
+
 
 require __DIR__ . '/auth.php';
