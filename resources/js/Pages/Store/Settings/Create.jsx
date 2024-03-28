@@ -34,7 +34,8 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
 
     const [showForm, setShowForm] = useState(false);
     const [isActive, setIsActive] = useState(false);
-    const [selectedState, setSelectedState] = useState(data.state || ''); // Initialize with the current state if editing
+    const [selectedState, setSelectedState] = useState(data.state || '');
+    const [selectedCategory, setSelectedCategory] = useState(data.category || '');
 
     const handleStateChange = (field, value) => {
         setData(field, value);
@@ -43,7 +44,6 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
         } else if (field === 'category') {
             setSelectedCategory(value);
         }
-
     };
 
     const submit = (e) => {
@@ -114,7 +114,7 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
                             <InputError message={errors.store_slug} />
                         </div>
                         <div>
-                            <CategoryDropdown value={selectedState} onChange={handleStateChange} />
+                            <CategoryDropdown value={selectedCategory} onChange={(e) => handleStateChange('category', e.target.value)} error={errors.category} />
                         </div>
                         {/* About Us Input */}
                         <div>
@@ -164,7 +164,7 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
                             <InputError message={errors.analytics_code} />
                         </div>
                         <div className="flex items-center gap-4">
-                            <StatesDropdown value={selectedState} onChange={handleStateChange} />
+                            <StatesDropdown value={selectedState} onChange={(e) => handleStateChange('state', e.target.value)} error={errors.category} />
                         </div>
                         <div>
                             <InputLabel htmlFor="city" value="City" />
@@ -172,7 +172,7 @@ const CreateStoreSettings = ({ auth, storeSettings }) => {
                                 id="city"
                                 className="mt-1 block w-full"
                                 value={data.city}
-                                onChange={e => setData('store_slug', e.target.value)}
+                                onChange={e => setData('city', e.target.value)}
                                 required
                                 pattern="[A-Za-z0-9-]+"
                                 title="City"

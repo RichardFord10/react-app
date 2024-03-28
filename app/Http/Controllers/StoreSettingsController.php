@@ -58,6 +58,7 @@ class StoreSettingsController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('store_settings', $request->all());
 
         $validatedData = $request->validate([
             'store_name' => 'required|string|max:255',
@@ -66,13 +67,27 @@ class StoreSettingsController extends Controller
             'contact_phone' => 'nullable|string|max:255',
             'store_slug' => 'required|string|max:255',
             'active' => 'required|boolean',
+            'social_media_links' => 'nullable|array',
+            'payment_methods' => 'nullable|array',
+            'shipping_info' => 'nullable|string',
+            'tax_settings' => 'nullable|array',
+            'seo_settings' => 'nullable|array',
+            'analytics_code' => 'nullable|string',
+            'category' => 'nullable|string',
+            'state' => 'nullable|string',
+            'city' => 'nullable|string',
         ]);
-
+        Log::info('validated_data', $validatedData);
         $store = Store::updateOrCreate(
             ['user_id' => auth()->id()],
             [
                 'store_name' => $validatedData['store_name'],
                 'store_slug' => $validatedData['store_slug'],
+                'status' => $validatedData['active'] ? 'active' : 'inactive',
+                'city' => $validatedData['city'] ?? '',
+                'state' => $validatedData['state'] ?? '',
+                'country' => $validatedData['country'] ?? '',
+                'category' => $validatedData['category'] ?? null,
                 'status' => $validatedData['active'] ? 'active' : 'inactive',
             ]
         );
