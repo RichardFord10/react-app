@@ -1,10 +1,10 @@
-import {router} from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 
 export default function DeleteButton({ to, className = '', disabled, children, ...props }) {
     const handleClick = (e) => {
         e.preventDefault();
-        if (to && confirm('Are you sure you want to delete this post?')) {
-          router.delete(to);
+        if (to && confirm('Are you sure you want to delete?')) {
+            router.delete(to);
         }
     };
 

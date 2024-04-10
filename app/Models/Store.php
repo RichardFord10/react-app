@@ -18,5 +18,21 @@ class Store extends Model
         'country',
         'state',
         'city',
+        'store_logo',
+        'store_banner',
+        'about_us',
+        'contact_email',
+        'contact_phone',
+        'social_media_links',
+        'payment_methods',
+        'shipping_info',
+        'tax_settings',
+        'seo_settings',
+        'analytics_code',
     ];
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }

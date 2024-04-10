@@ -5,8 +5,7 @@ import CommentsList from "@/Components/CommentsList";
 
 function Post({ post, auth }) {
     const [comments, setComments] = useState([]);
-    console.log(comments)
-    console.log(auth.user)
+    console.log('comments', comments)
     useEffect(() => {
         fetchComments();
     }, [post.id]);

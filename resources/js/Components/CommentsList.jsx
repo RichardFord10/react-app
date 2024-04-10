@@ -5,7 +5,7 @@ function CommentsList({ comments = [] }) {
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
-
+    console.log(comments)
     return (
         <div>
             <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
@@ -18,7 +18,7 @@ function CommentsList({ comments = [] }) {
                             </div>
                             <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
                                 <span>{formatDate(comment.created_at)}</span>
-                                <span>{comment.user?.name}</span>
+                                <span className="flex">{comment.user?.name}&nbsp;<img src={`/storage/${comment.user.image_path}`} className='h-5 w-5 rounded-full' /></span>
                             </div>
                         </li>
                     ))}

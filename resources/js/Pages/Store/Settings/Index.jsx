@@ -11,9 +11,7 @@ export default function Index({ auth, storeSettings }) {
         >
             <div>
                 {
-                    storeSettings ?
-                        <Edit storeSettings={storeSettings} /> :
-                        <Create auth={auth} />
+                    <Create auth={auth} storeSettings={storeSettings} />
                 }
             </div>
         </AuthenticatedLayout>

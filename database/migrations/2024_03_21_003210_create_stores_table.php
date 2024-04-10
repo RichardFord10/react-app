@@ -21,6 +21,17 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('state')->nullable();
             $table->string('city')->nullable();
+            $table->string('store_logo')->nullable();
+            $table->string('store_banner')->nullable();
+            $table->text('about_us')->nullable();
+            $table->string('contact_email')->nullable();
+            $table->string('contact_phone')->nullable();
+            $table->json('social_media_links')->nullable();
+            $table->json('payment_methods')->nullable();
+            $table->json('shipping_info')->nullable();
+            $table->json('tax_settings')->nullable();
+            $table->json('seo_settings')->nullable();
+            $table->string('analytics_code')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\User;
-use App\Models\StoreSettings;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +66,7 @@ class ImageController extends Controller
 
     public function processStoreImages($path)
     {
-        $store = StoreSettings::where('user_id', Auth::id())->first();
+        $store = Store::where('user_id', Auth::id())->first();
         if ($store) {
             $store->store_logo = $path;
             $store->save();

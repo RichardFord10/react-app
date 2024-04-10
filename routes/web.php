@@ -41,8 +41,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 //auth routes
 Route::middleware('auth')->group(function () {
-    Route::get('/store-settings', [StoreSettingsController::class, 'index'])->name('store-settings.index');
-    Route::post('/store-settings', [StoreSettingsController::class, 'store'])->name('store-settings.store');
+    Route::get('/store-settings', [StoreController::class, 'index'])->name('store-settings.index');
+    Route::post('/store-settings', [StoreController::class, 'store'])->name('store-settings.store');
+    Route::delete('/store-settings/delete/{id}', [StoreController::class, 'destroy'])->name('store-settings.delete');
     Route::get('/images/{id}', [ImageController::class, 'show']);
     Route::put('/update-image/{id}', [ImageController::class, 'update'])->name('image.update');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -65,5 +66,5 @@ Route::middleware('auth')->group(function () {
 
 //non auth routes
 
-
+Route::get('/stores/{store}', [StoreController::class, 'show'])->name('stores.show');
 require __DIR__ . '/auth.php';

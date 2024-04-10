@@ -4,21 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Log;
 use App\Models\Post;
+use App\Models\User;
 
 class CommentsController extends Controller
 {
     public function index($postId)
     {
-        // Fetch comments for the given post ID
-        $comments = Comment::where('post_id', $postId)->get();
-
+        $comments = Comment::where('post_id', $postId)
+            ->with('user')
+            ->get();
         return response()->json(['comments' => $comments]);
     }
 
 
     public function store(Request $request)
     {
+        Log::info($request->all());
         $request->validate([
             'body' => 'required|string',
             'post_id' => 'required|exists:posts,id',
